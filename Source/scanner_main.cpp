@@ -1,6 +1,3 @@
-/*
-https://www3.nd.edu/~dthain/compilerbook/chapter3.pdf
-*/
 #include "scanner_token.h"
 #include <stdio.h>
 #include <string_view>
