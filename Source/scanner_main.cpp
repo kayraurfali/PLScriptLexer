@@ -1,6 +1,8 @@
 #include "scanner_token.h"
-#include <stdio.h>
+#include <cstdio>
 #include <string_view>
+#include <iostream>
+#include <vector>
 
 extern FILE *yyin;
 extern int yylex();
@@ -38,18 +40,36 @@ std::string_view to_token_name(token_t t)
     }
 }
 
-int main()
+int main(int argc, char** argv)
 {
-    yyin = fopen("program.pls", "r");
-    if (!yyin)    {
-        printf("could not open program.c!\n");
-        return 1;
+    std::vector<std::string> plscript_files;
+    plscript_files.reserve(argc);
+
+    for (std::size_t i{1}; i < argc; i++)
+    {
+        std::cout << "File Name: " << argv[i];
+        plscript_files.emplace_back(argv[i]);
     }
-    while (1){
-        token_t t = static_cast<token_t>(yylex());
-        if (t == TOKEN_EOF)
-            break;
-        std::string_view token_name = to_token_name(t);
-        printf("token: %s text: %s\n", token_name.data(), yytext);
+
+    for(auto const& file_name: plscript_files)
+    {
+        yyin = std::fopen(file_name.c_str(), "r");
+         if (!yyin)    {
+            std::cout << "Could not open the script " << file_name << std::endl;
+            continue;
+        }
+
+        std::cout << "Scanning file: " << file_name << '\n';
+
+        token_t t{TOKEN_ERROR}; // start of with error
+        while(t != TOKEN_EOF)
+        {
+            std::string token_name(to_token_name(t));
+            std::cout << "Token: " << token_name << " Text: " << yytext << '\n';
+            printf("token: %s text: %s\n", token_name.c_str(), yytext);
+            t = static_cast<token_t>(yylex());
+        }
     }
+
+    std::cout << std::endl;
 }

@@ -4,4 +4,4 @@ cmake --build build --config=Release -j16
 cmake --install build
 
 cd bin
-./PLScriptCompiler
+./PLScriptCompiler program.pls
