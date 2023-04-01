@@ -1,4 +1,3 @@
-/*https://www3.nd.edu/~dthain/compilerbook/chapter3.pdf*/
 typedef enum {
     TOKEN_EOF=0,
     TOKEN_SEMICOLON,
